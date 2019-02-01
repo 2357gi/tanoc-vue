@@ -1,64 +1,88 @@
-var app = new Vue({
+// https://jp.vuejs.org/v2/examples/todomvc.html
+var STORAGE_KEY = 'todos-vuejs-demo'
+var todoStorage = {
+  fetch: function() {
+    var todos = JSON.parse(
+      localStorage.getItem(STORAGE_KEY) || '[]'
+    )
+    todos.forEach(function(todo, index) {
+      todo.id = index
+    })
+    todoStorage.uid = todos.length
+    return todos
+  },
+  save: function(todos) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
+  }
+}
+
+var vm = new Vue({
   el: '#app',
   data: {
-    message: 'Hello Vusddd!'
-  }
-})
+    todos: [],
+    options: [
+      {value: -1, label: '全て' },
+      {value:0,   label: '作業中'},
+      {value:1,   label: '完了'}
+    ],
+    current: -1,
+    trees: [
+      {id:0, class:"id", text:'id'},
+      {id:1, class:"state", text:"state"},
+      {id:2, class:'button', text:'button'}
+    ],
+    numTab: 0
 
-var app2 = new Vue({
-  el: '#app-2',
-  data: {
-    message: 'You loaded this page on ' + new Date().toLocaleDateString()
-  }
-})
-
-var app3 = new Vue({
-  ell: '#app-3',
-  data:{
-    seen: true
-  }
-})
-
-var app4 = new Vue({
-  el: '#app-4',
-  data: {
-    todos: [
-      { text: 'Learn JavaScript' },
-      { text: 'Learn Vue' },
-      { text: 'Build something awesome' }
-    ]
-}
-})
-
-var app5 = new Vue({
-  el: "#app-5",
-  data: {
-    message: 'Hello Vue.js!'
   },
+
   methods: {
-    reverseMessage: function () {
-      this.message = this.message.split("").reverse().join()
+    setNumTab: function(num){
+      this.data.numTab = num
+    },
+
+    doAdd: function (event, value) {
+      // refで名前をつけていた要素を参照(methodから参照するからthisをつける)
+      var comment = this.$refs.comment
+      //　入力が何もなければ何もせずreturn
+      if (!comment.value.length) {
+        return
+      }
+
+      // { 新しいID, comment, status }
+      // をtodosへpush
+      // statusはdefaultが作業中 = 0 で作成
+      this.todos.push({
+        id: todoStorage.uid++,
+        comment: comment.value,
+        state: 0
+      })
+      // フォーム要素をからにする
+      comment.value = ''
+    },
+
+
+    doChangeState: function (item) {
+      item.state = item.state ? 0 : 1
+    },
+    // 削除の処理
+    doRemove: function (item) {
+      var index = this.todos.indexOf(item)
+      this.todos.splice(index, 1)
     }
+
+  },
+
+  watch: {
+    todos: {
+      handler: function (todos) {
+        todoStorage.save(todos)
+      },
+      deep: true
+    }
+  },
+
+  created() {
+    this.todos = todoStorage.fetch()
   }
+
 })
-
-
-var app6 = new Vue({
-  el: '#app-6',
-  data: {
-    message: 'hello Vue!'
-  }
-})
-
-Vue.component('blog-component', {
-  props: ['title'],
-  template: '<h3>{{ title }}</h3>'
-})
-
-new Vue({
-  el:'#blog',
-  data: {
-    posts: []
-  }
-})
-

@@ -1,50 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My first Vue app</title>
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <meta charset="UTF-8">
+  <title>todo</title>
+  <link rel="stylesheet" href="main.css">
 </head>
 <body>
-<div id="app">
-  {{ message }}
-</div>
-<div id="app-2">
-  <span v-bind:title="message">
-    Hover your mousee over me for a few seconds
-    to see my dynamically bound title!
-  </span>
-</div>
+  <div id="app">
+    <h1>Todo with vue.js</h1>
 
-<div id="app-3">
-  <span v-if="seen">Now you see me?</span>
-</div>
+    <label v-for="label in options">
+      <input type="radio"
+        v-model="current"
+        v-bind:value="label.value">
+      {{ label.label }}
+    </label>
+    <table>
+      <thead>
+      <tr v-for="tree in trees">
+        <th @click=setNumTab(tree.id) :class="[tree.id === numTab ? 'under_bar' : '']" :class="tree.class">{{ tree.text }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- ここにtrでTodoのdataを一行づつひょうじしたい -->
+      <tr v-for="item in todos" v-bind:key="item.id">
+        <th>{{ item.id }}</th>
+        <th>{{ item.comment }}</th>
+        <td class="state">
+          <button v-on:click="doChangeState(item)">{{ item.state }}</button>
+        </td>
+        <td cllass="button" >
+          <button @click='doRemove(item)'>削除</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
 
-<div id="app-4">
-  <ol>
-    <li v-for="todo in todos">
-      {{ todo.text }}
-    </li>
-  </ol>
-</div>
+    <h2>新しい作業の追加</h2>
+    <form class="add-form" v-on:submit.prevent="doAdd">
+      <!-- コメント入力フォーム -->
+      コメント <input type="text" ref="comment">
+      <!-- 追加ボタンのモック -->
+      <button type="submit">追加</button>
+    </form>
 
-<div id="app-5">
-  <p>
-    {{ message }}
-  </p>
-  <button v-on:click="reverseMessage">Reverse Message</button>
-</div>
 
-<div id="app-6">
-  <p> {{ message }}</p>
-  <input v-model="message">
-</div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="index.js"></script>
 
-<div id="blog-2">
-  <blog-component title="My Journey with Vue"></blog-component>
-  <blog-component title="Blogging with Vue"></blog-component>
-  <blog-component title="Why Vue is so fun"></blog-component>
-</div>
-
-<script type="text/javascript" src="index.js"></script>
 </body>
 </html>

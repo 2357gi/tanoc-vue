@@ -53,3 +53,6 @@ button {
   color: #fff;
   cursor: pointer;
 }
+.under_bar {
+  border-bottom: #0099e4;
+}
