@@ -16,13 +16,18 @@ var todoStorage = {
   }
 }
 
-const app = new Vue({
+var vm = new Vue({
   el: '#app',
   data: {
-    todos: []
+    todos: [],
+    options: [
+      {value: -1, label: '全て' },
+      {value:0,   label: '作業中'},
+      {value:1,   label: '完了'}
+    ],
+    current: -1
+
   },
-
-
 
 
   methods: {
@@ -44,7 +49,17 @@ const app = new Vue({
       })
       // フォーム要素をからにする
       comment.value = ''
+    },
+
+    doChangeState: function (item) {
+      item.state = item.state ? 0 : 1
+    },
+    // 削除の処理
+    doRemove: function (item) {
+      var index = this.todos.indexOf(item)
+      this.todos.splice(index, 1)
     }
+
   },
 
   watch: {
@@ -57,7 +72,7 @@ const app = new Vue({
   },
 
   created() {
-    this.todos =
+    this.todos = todoStorage.fetch()
   }
 
 })

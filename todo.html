@@ -21,20 +21,20 @@
       <tbody>
       <!-- ここにtrでTodoのdataを一行づつひょうじしたい -->
       <tr v-for="item in todos" v-bind:key="item.id">
-        <th>{{ item.idd }}</th>
+        <th>{{ item.id }}</th>
         <th>{{ item.comment }}</th>
         <td class="state">
-          <button>{{ item.state }}</button>
+          <button v-on:click="doChangeState(item)">{{ item.state }}</button>
         </td>
-        <td cllass="button">
-          <button>削除</button>
+        <td cllass="button" >
+          <button @click='doRemove(item)'>削除</button>
         </td>
       </tr>
       </tbody>
     </table>
 
     <h2>新しい作業の追加</h2>
-    <form class="add-form" c-on:submit.prevent="doAdd">
+    <form class="add-form" v-on:submit.prevent="doAdd">
       <!-- コメント入力フォーム -->
       コメント <input type="text" ref="comment">
       <!-- 追加ボタンのモック -->
