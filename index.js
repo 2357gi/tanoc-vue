@@ -56,7 +56,7 @@ Vue.component('blog-component', {
 })
 
 new Vue({
-  el:'#blog'
+  el:'#blog',
   data: {
     posts: []
   }
